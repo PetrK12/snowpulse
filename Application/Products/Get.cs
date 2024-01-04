@@ -1,8 +1,9 @@
 using Application.Core;
 using Domain.Entities;
+using Domain.Repository;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Context;
+using Infrastructure.Persistence;
 
 namespace Application.Products;
 
@@ -15,17 +16,16 @@ public class Get
     
     public class Handler : IRequestHandler<Query, Result<Product>>
     {
-        private readonly StoreDbContext _context;
+        private readonly IProductRepository _repository;
 
-        public Handler(StoreDbContext context)
+        public Handler(IProductRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<Result<Product>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products
-                .FirstOrDefaultAsync(x => x.Id == request.Id);
+            var product = await _repository.GetProductByIdAsync(request.Id);
 
             if (product == null) return null;
 

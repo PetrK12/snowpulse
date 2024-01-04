@@ -1,6 +1,8 @@
 using Application.Products;
+using Domain.Repository;
+using Infrastructure.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Context;
+using Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,7 @@ builder.Services.AddDbContext<StoreDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
 var app = builder.Build();
@@ -29,5 +31,20 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<StoreDbContext>();
+var logger = services.GetRequiredService<ILogger<Program>>();
+
+try
+{
+    await context.Database.MigrateAsync();
+    await StoreDataSeed.SeedAsync(context);
+}
+catch (Exception ex)
+{
+    logger.LogError(ex,"Error during migration");
+}
 
 app.Run();
