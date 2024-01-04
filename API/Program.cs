@@ -1,6 +1,7 @@
+using Application.MappingProfiles;
 using Application.Products;
 using Domain.Repository;
-using Infrastructure.DataAccess;
+using Infrastructure.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Persistence;
 
@@ -12,11 +13,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(Profiles).Assembly);
 builder.Services.AddDbContext<StoreDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(StoreRepository<>));
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
 var app = builder.Build();
@@ -29,7 +31,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
+app.UseStaticFiles();
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();

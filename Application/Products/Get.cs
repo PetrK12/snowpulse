@@ -1,35 +1,38 @@
 using Application.Core;
+using Application.DataTransferObject;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Repository;
+using Infrastructure.DataAccess.Specification.Filters;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Infrastructure.Persistence;
 
 namespace Application.Products;
 
 public class Get
 {
-    public class Query : IRequest<Result<Product>>
+    public class Query : IRequest<Result<ProductClientDto>>
     {
         public int Id { get; set; }
     }
     
-    public class Handler : IRequestHandler<Query, Result<Product>>
+    public class Handler : IRequestHandler<Query, Result<ProductClientDto>>
     {
-        private readonly IProductRepository _repository;
+        private readonly IRepository<Product> _repository;
+        private readonly IMapper _mapper;
 
-        public Handler(IProductRepository repository)
+        public Handler(IRepository<Product> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<Result<Product>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<ProductClientDto>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var product = await _repository.GetProductByIdAsync(request.Id);
+            var product = await _repository.GetEntityWithSpec(new ProductsWithTypesAndBrandsSpecification(request.Id));
 
             if (product == null) return null;
 
-            return Result<Product>.Success(product);
+            return Result<ProductClientDto>.Success(_mapper.Map<Product, ProductClientDto>(product));
 
         }
     }

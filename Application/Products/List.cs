@@ -1,9 +1,8 @@
 using Application.Core;
 using Domain.Entities;
 using Domain.Repository;
+using Infrastructure.DataAccess.Specification.Filters;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Infrastructure.Persistence;
 
 namespace Application.Products;
 
@@ -16,16 +15,16 @@ public class List
 
     public class Handler : IRequestHandler<Query, Result<IEnumerable<Product>>>
     {
-        private readonly IProductRepository _repository;
+        private readonly IRepository<Product> _repository;
 
-        public Handler(IProductRepository repository)
+        public Handler(IRepository<Product> repository)
         {
             _repository = repository;
         }
 
         public async Task<Result<IEnumerable<Product>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var products = await _repository.GetProductAsync();
+            var products = await _repository.ListAsync(new ProductsWithTypesAndBrandsSpecification());
 
             if (products == null) return null;
 
