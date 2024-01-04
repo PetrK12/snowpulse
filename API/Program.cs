@@ -21,6 +21,16 @@ builder.Services.AddDbContext<StoreDbContext>(opt =>
 builder.Services.AddScoped(typeof(IRepository<>), typeof(StoreRepository<>));
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
+
+builder.Services.AddCors(opts =>
+{
+    opts.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithOrigins("https://localhost:4200");
+    });
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,9 +39,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseAuthorization();
 app.UseStaticFiles();
+app.UseCors("CorsPolicy");
+app.UseAuthorization();
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();

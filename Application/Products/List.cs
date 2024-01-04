@@ -1,6 +1,9 @@
 using Application.Core;
+using Application.DataTransferObject;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Repository;
+using Infrastructure.DataAccess.Specification;
 using Infrastructure.DataAccess.Specification.Filters;
 using MediatR;
 
@@ -8,27 +11,41 @@ namespace Application.Products;
 
 public class List
 {
-    public class Query : IRequest<Result<IEnumerable<Product>>>
+    public class Query : IRequest<Result<Pagination<ProductClientDto>>>
     {
-        
+        public ProductSpecificationParams ProductParams { get; set; }
     }
 
-    public class Handler : IRequestHandler<Query, Result<IEnumerable<Product>>>
+    public class Handler : IRequestHandler<Query, Result<Pagination<ProductClientDto>>>
     {
         private readonly IRepository<Product> _repository;
+        private readonly IMapper _mapper;
 
-        public Handler(IRepository<Product> repository)
+        public Handler(IRepository<Product> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<Product>>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<Pagination<ProductClientDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var products = await _repository.ListAsync(new ProductsWithTypesAndBrandsSpecification());
+            var spec = new ProductsWithTypesAndBrandsSpecification(request.ProductParams);
+            var countSpec = new ProductsWithFiltersForCountSpecification(request.ProductParams);
 
-            if (products == null) return null;
+            var totalItems = await _repository.CountAsync(countSpec);
+            var products = await _repository.ListAsync(spec);
 
-            return Result<IEnumerable<Product>>.Success(products);
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductClientDto>>(products);
+            
+            if (data == null) return null;
+
+            return Result<Pagination<ProductClientDto>>.Success(new Pagination<ProductClientDto>
+            {
+                PageIndex = request.ProductParams.PageIndex,
+                PageSize = request.ProductParams.PageSize,
+                Count = totalItems,
+                Data = data
+            });
         }
     }
 }

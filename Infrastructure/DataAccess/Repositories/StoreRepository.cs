@@ -27,6 +27,8 @@ public class StoreRepository<T> : IRepository<T> where T : BaseEntity
     public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec) =>
         await ApplySpecification(spec).ToListAsync();
 
+    public async Task<int> CountAsync(ISpecification<T> spec) => await ApplySpecification(spec).CountAsync();
+
     public Task Delete(int id)
     {
         throw new NotImplementedException();

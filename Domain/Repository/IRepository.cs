@@ -8,6 +8,7 @@ public interface IRepository<T> where T : BaseEntity
     Task<IEnumerable<T>> GetAll();
     Task<T> GetEntityWithSpec(ISpecification<T> spec);
     Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
+    Task<int> CountAsync(ISpecification<T> spec);
     Task Delete(int id);
     Task Update(T entity);
     Task Create(T entity);
