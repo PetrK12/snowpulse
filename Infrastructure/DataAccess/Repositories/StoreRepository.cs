@@ -19,8 +19,10 @@ public class StoreRepository<T> : IRepository<T> where T : BaseEntity
 
 
     public async Task<IEnumerable<T>> GetAll() => await _context.Set<T>().ToListAsync();
-
-
+    public async Task<IReadOnlyList<T>> ListAllAsync()
+    {
+        return await _context.Set<T>().ToListAsync();
+    }
     public async Task<T> GetEntityWithSpec(ISpecification<T> spec) => 
         await ApplySpecification(spec).FirstOrDefaultAsync();
 

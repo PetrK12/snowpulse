@@ -1,6 +1,8 @@
+using MediatR;
+
 namespace Application.Core;
 
-public class Result<T>
+public class Result<T> : IRequest
 {
     public bool IsSuccess { get; private init; }
     public T? Value { get; private init; }

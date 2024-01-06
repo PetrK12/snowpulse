@@ -1,9 +1,11 @@
 using Application.MappingProfiles;
 using Application.Products;
+using Domain.Entities;
 using Domain.Repository;
 using Infrastructure.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Persistence;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,7 @@ builder.Services.AddCors(opts =>
             .WithOrigins("https://localhost:4200");
     });
 });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
