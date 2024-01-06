@@ -6,6 +6,7 @@ using Infrastructure.DataAccess.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace API.Extensions;
 
@@ -31,15 +32,18 @@ public static class ApplicationServiceExtension
                 return new BadRequestObjectResult(errorResponse);
             };
         });
-
         services.AddDbContext<StoreDbContext>(opt =>
         {
             opt.UseSqlite(configuration.GetConnectionString("DefaultConnection"));
         });
+        services.AddSingleton<IConnectionMultiplexer>(c =>
+        {
+            var options = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
+            return ConnectionMultiplexer.Connect(options);
+        });
+        services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped(typeof(IRepository<>), typeof(StoreRepository<>));
-
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
-
         services.AddCors(opts =>
         {
             opts.AddPolicy("CorsPolicy", policy =>
