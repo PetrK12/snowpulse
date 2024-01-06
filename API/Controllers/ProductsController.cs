@@ -1,3 +1,4 @@
+using API.Errors;
 using Application.Core;
 using Application.DataTransferObject;
 using Application.Products;
@@ -14,6 +15,8 @@ namespace API.Controllers
             => HandleResult(await Mediator.Send(new List.Query { ProductParams = productParams}));
         
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductClientDto>> GetProduct(int id) => HandleResult(await 
             Mediator.Send(new Get.Query { Id = id }));
       

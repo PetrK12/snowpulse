@@ -1,3 +1,4 @@
+using API.Errors;
 using Application.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ public class BaseController : ControllerBase
 
         if (result.IsSuccess && result.Value != null) return Ok(result.Value);
 
-        if (result.IsSuccess && result.Value == null) return NotFound();
+        if (result.IsSuccess && result.Value == null) return NotFound(new ApiResponse(404));
         
         return BadRequest();
     }
