@@ -1,7 +1,7 @@
 using Application.Core;
 using Application.DataTransferObject;
 using Domain;
-using Domain.Entities.Identity;
+using Domain.Entities.BusinessEntities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -26,6 +26,9 @@ public class Register
         }
         public async Task<Result<UserDto>> Handle(Command request, CancellationToken cancellationToken)
         {
+            var emailUsed = await _userManager.FindByEmailAsync(request.RegisterDto.Email) != null;
+            if (emailUsed) return Result<UserDto>.Failure("Email used");
+            
             var user = new AppUser
             {
                 DisplayName = request.RegisterDto.Displayname,

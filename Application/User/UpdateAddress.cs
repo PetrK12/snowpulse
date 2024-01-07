@@ -3,7 +3,7 @@ using Application.Core;
 using Application.DataTransferObject;
 using Application.Extensions;
 using AutoMapper;
-using Domain.Entities.Identity;
+using Domain.Entities.BusinessEntities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 

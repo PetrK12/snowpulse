@@ -1,6 +1,7 @@
 using API.Errors;
 using Application.Basket;
-using Domain.Entities;
+using Application.DataTransferObject;
+using Domain.Entities.BusinessEntities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -16,9 +17,9 @@ public class BasketController : BaseController
     [HttpPost]
     [ProducesResponseType(typeof(CustomerBasket),StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasket basket)
+    public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDto basket)
     => 
-        HandleResult(await Mediator.Send(new Update.Command { CustomerBasket = basket}));
+        HandleResult(await Mediator.Send(new Update.Command { CustomerBasketDto = basket}));
     
     [HttpGet]
     [ProducesResponseType(typeof(CustomerBasket),StatusCodes.Status200OK)]

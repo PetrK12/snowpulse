@@ -1,4 +1,4 @@
-using Domain.Entities.Identity;
+using Domain.Entities.BusinessEntities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

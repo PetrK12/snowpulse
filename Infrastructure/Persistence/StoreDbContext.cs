@@ -1,5 +1,5 @@
 using System.Reflection;
-using Domain.Entities;
+using Domain.Entities.BusinessEntities;
 using Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 

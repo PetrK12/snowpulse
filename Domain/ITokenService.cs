@@ -1,4 +1,4 @@
-using Domain.Entities.Identity;
+using Domain.Entities.BusinessEntities.Identity;
 
 namespace Domain;
 

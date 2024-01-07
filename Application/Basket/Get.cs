@@ -1,5 +1,5 @@
 using Application.Core;
-using Domain.Entities;
+using Domain.Entities.BusinessEntities;
 using Domain.Repository;
 using MediatR;
 

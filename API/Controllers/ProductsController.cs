@@ -1,8 +1,7 @@
 using API.Errors;
-using Application.Core;
 using Application.DataTransferObject;
 using Application.Products;
-using Domain.Entities;
+using Domain.Entities.BusinessEntities;
 using Infrastructure.DataAccess.Specification;
 using Microsoft.AspNetCore.Mvc;
 

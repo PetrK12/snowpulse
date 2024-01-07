@@ -1,5 +1,5 @@
 using Application.Core;
-using Domain.Entities.Identity;
+using Domain.Entities.BusinessEntities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 

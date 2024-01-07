@@ -1,6 +1,6 @@
 using Application.DataTransferObject;
 using Application.User;
-using Domain.Entities.Identity;
+using Domain.Entities.BusinessEntities.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

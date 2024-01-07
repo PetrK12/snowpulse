@@ -1,7 +1,7 @@
 using Application.Core;
 using Application.DataTransferObject;
 using AutoMapper;
-using Domain.Entities;
+using Domain.Entities.BusinessEntities;
 using Domain.Repository;
 using Infrastructure.DataAccess.Specification;
 using Infrastructure.DataAccess.Specification.Filters;

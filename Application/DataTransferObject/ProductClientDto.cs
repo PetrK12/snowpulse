@@ -1,4 +1,4 @@
-using Domain.Entities;
+using Domain.Entities.BusinessEntities;
 
 namespace Application.DataTransferObject;
 

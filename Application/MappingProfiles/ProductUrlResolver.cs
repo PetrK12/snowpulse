@@ -1,7 +1,7 @@
 using Application.DataTransferObject;
 using AutoMapper;
 using AutoMapper.Execution;
-using Domain.Entities;
+using Domain.Entities.BusinessEntities;
 using Microsoft.Extensions.Configuration;
 
 namespace Application.MappingProfiles;

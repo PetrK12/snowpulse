@@ -4,7 +4,7 @@ using Application.DataTransferObject;
 using Application.Extensions;
 using AutoMapper;
 using Domain;
-using Domain.Entities.Identity;
+using Domain.Entities.BusinessEntities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
@@ -30,7 +30,7 @@ public class GetAddress
         public async Task<Result<AddressDto>> Handle(Query request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindUserByClaimsPrincipleWithAddress(request.User);
-            
+
             if ((user != null) && (user.Address == null)) return Result<AddressDto>.Success(null);
 
             return Result<AddressDto>.Success(_mapper.Map<AddressDto>(user.Address));

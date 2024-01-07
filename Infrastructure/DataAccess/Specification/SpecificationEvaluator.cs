@@ -1,4 +1,4 @@
-using Domain.Entities;
+using Domain.Entities.BusinessEntities;
 using Domain.Repository;
 using Microsoft.EntityFrameworkCore;
 

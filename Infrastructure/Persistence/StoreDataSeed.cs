@@ -1,5 +1,5 @@
 using System.Text.Json;
-using Domain.Entities;
+using Domain.Entities.BusinessEntities;
 
 namespace Infrastructure.Persistence;
 

@@ -1,6 +1,6 @@
 using API.Extensions;
 using API.Middleware;
-using Domain.Entities.Identity;
+using Domain.Entities.BusinessEntities.Identity;
 using Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Persistence;
@@ -12,19 +12,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityService(builder.Configuration);
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerDocumentation();
+
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 // Configure the HTTP request pipeline.
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
+app.UseSwaggerDocumentation();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 app.UseStaticFiles();
 app.UseCors("CorsPolicy");
 
