@@ -10,7 +10,7 @@ public class BasketController : BaseController
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-    public async Task DeleteBasket([FromQuery]string id)
+    public async Task DeleteBasket(string id)
     => HandleResult(await Mediator.Send(new Delete.Command { BasketId = id}));
     
     [HttpPost]
@@ -23,6 +23,6 @@ public class BasketController : BaseController
     [HttpGet]
     [ProducesResponseType(typeof(CustomerBasket),StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CustomerBasket>> GetBasket(string basketId)
-        => HandleResult(await Mediator.Send(new Get.Query { BasketId = basketId}));
+    public async Task<ActionResult<CustomerBasket>> GetBasket(string id)
+        => HandleResult(await Mediator.Send(new Get.Query { BasketId = id}));
 }
