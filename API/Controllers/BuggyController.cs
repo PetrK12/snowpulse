@@ -1,4 +1,5 @@
 using API.Errors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -25,5 +26,12 @@ public class BuggyController : BaseController
     public ActionResult GetServerError(int id)
     {
         return Ok();
+    }
+
+    [HttpGet("testauth")]
+    [Authorize]
+    public ActionResult<string> GetSecretText()
+    {
+        return "secret stuff";
     }
 }

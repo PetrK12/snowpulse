@@ -1,9 +1,11 @@
 using API.Errors;
 using Application.MappingProfiles;
 using Application.Products;
+using Domain;
 using Domain.Repository;
 using Infrastructure.DataAccess.Repositories;
 using Infrastructure.Persistence;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
@@ -41,6 +43,7 @@ public static class ApplicationServiceExtension
             var options = ConfigurationOptions.Parse(configuration.GetConnectionString("Redis"));
             return ConnectionMultiplexer.Connect(options);
         });
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped(typeof(IRepository<>), typeof(StoreRepository<>));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));

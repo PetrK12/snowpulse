@@ -17,6 +17,10 @@ public class BaseController : ControllerBase
     {
         if (result == null) return NotFound(new ApiResponse(404));
 
+        if (!result.IsSuccess && result.Error == "Unauthorized") return Unauthorized(new ApiResponse(401));
+
+        if (!result.IsSuccess && result.Error == "BadRequest") return Unauthorized(new ApiResponse(400));
+        
         if (result.IsSuccess && result.Value != null) return Ok(result.Value);
 
         if (result.IsSuccess && result.Value == null) return NotFound(new ApiResponse(404));
