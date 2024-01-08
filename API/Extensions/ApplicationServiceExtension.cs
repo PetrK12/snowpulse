@@ -4,6 +4,7 @@ using Application.Products;
 using Domain;
 using Domain.Repository;
 using Infrastructure.DataAccess.Repositories;
+using Infrastructure.DataAccess.UnitOfWork;
 using Infrastructure.Persistence;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,8 @@ public static class ApplicationServiceExtension
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IBasketRepository, BasketRepository>();
         services.AddScoped(typeof(IRepository<>), typeof(StoreRepository<>));
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
         services.AddCors(opts =>
         {

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Domain.Entities.BusinessEntities;
+using Domain.Entities.OrderAggregate;
 
 namespace Infrastructure.Persistence;
 
@@ -27,7 +28,14 @@ public class StoreDataSeed
             var products = JsonSerializer.Deserialize<List<Product>>(productData);
             context.Products.AddRange(products);
         }
-
+        
+        if (!context.DeliveryMethods.Any())
+        {
+            var deliveryData = File.ReadAllText("../Infrastructure/SeedData/delivery.json");
+            var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+            context.DeliveryMethods.AddRange(methods);
+        }
+        
         if (context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();
     }    
 }
