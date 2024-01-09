@@ -6,6 +6,7 @@ import {HttpClient} from "@angular/common/http";
 import {IBasketItem} from "../shared/models/basketItem";
 import {IProduct} from "../shared/models/products";
 import {IBasketTotals} from "../shared/models/basketTotals";
+import {IDeliveryMethod} from "../shared/models/deliveryMethod";
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,13 @@ export class BasketService {
   basketSource$ = this.basketSource.asObservable();
   private basketTotalSource = new BehaviorSubject<IBasketTotals | null>(null);
   basketTotalSource$ = this.basketTotalSource.asObservable();
+  shipping = 0;
   constructor(private htpp: HttpClient) { }
 
+  setShippingPrice(deliverMethody: IDeliveryMethod){
+    this.shipping = deliverMethody.price;
+    this.calculateTotals();
+  }
   getBasket(id: string) {
     this.htpp.get<IBasket>(this.baseUrl + 'basket?id=' + id) .subscribe({
       next: basket => {
@@ -62,13 +68,16 @@ export class BasketService {
   private deleteBasket(basket: IBasket){
     return this.htpp.delete(this.baseUrl + 'basket?id=' + basket.id).subscribe({
       next: () => {
-        this.basketSource.next(null);
-        this.basketTotalSource.next(null);
-        localStorage.removeItem('basket_id')
+        this.deleteLocalBasket()
       }
     })
   }
 
+  deleteLocalBasket(){
+    this.basketSource.next(null);
+    this.basketTotalSource.next(null);
+    localStorage.removeItem('basket_id')
+  }
   private createBasket(): IBasket{
     const basket = new Basket();
     localStorage.setItem('basket_id', basket.id);
@@ -97,10 +106,9 @@ export class BasketService {
   private calculateTotals() {
     const basket = this.getCurrentBasketValue();
     if(!basket) return;
-    const shipping = 0;
     const subtotal = basket.items.reduce((a, b) =>(b.price * b.quantity) + a, 0);
-    const total = subtotal + shipping;
-    this.basketTotalSource.next({shipping, total, subtotal})
+    const total = subtotal + this.shipping;
+    this.basketTotalSource.next({shipping: this.shipping, total, subtotal})
   }
 
   private isProduct(item: IProduct | IBasketItem): item is IProduct {

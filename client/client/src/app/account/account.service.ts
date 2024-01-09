@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from "../../environments/environment";
-import {BehaviorSubject, map, of, ReplaySubject} from "rxjs";
+import { map, of, ReplaySubject} from "rxjs";
 import { IUser } from "../shared/models/user";
+import { IAddress } from "../shared/models/address";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { Router } from "@angular/router";
 
@@ -34,7 +35,12 @@ export class AccountService {
       })
     )
   }
-
+  getUserAddress() {
+    return this.http.get<IAddress>(this.baseUrl + 'account/address');
+  }
+  updateUserAddress(address: IAddress){
+    return this.http.put(this.baseUrl + 'account/address', address);
+  }
   login(values: any){
     return this.http.post<IUser>(this.baseUrl + 'account/login', values).pipe(
       map(user => {
