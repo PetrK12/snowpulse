@@ -1,9 +1,5 @@
-using API.Errors;
 using Application.DataTransferObject;
-using Application.Extensions;
 using Application.Orders;
-using AutoMapper;
-using Domain.Interfaces;
 using Domain.Entities.OrderAggregate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
