@@ -1,7 +1,7 @@
 using Domain.Entities.BusinessEntities;
 using Domain.Repository;
 
-namespace Domain;
+namespace Domain.Interfaces;
 
 public interface IUnitOfWork : IDisposable
 {

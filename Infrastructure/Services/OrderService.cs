@@ -1,6 +1,6 @@
-using Domain;
 using Domain.Entities.BusinessEntities;
 using Domain.Entities.OrderAggregate;
+using Domain.Interfaces;
 using Domain.Repository;
 using Infrastructure.DataAccess.Specification.Filters;
 

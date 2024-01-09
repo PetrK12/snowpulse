@@ -1,6 +1,6 @@
 using Domain.Entities.BusinessEntities.Identity;
 
-namespace Domain;
+namespace Domain.Interfaces;
 
 public interface ITokenService
 {

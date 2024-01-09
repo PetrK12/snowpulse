@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Domain.Interfaces;
 using Domain.Repository;
 
 namespace Infrastructure.DataAccess.Specification;

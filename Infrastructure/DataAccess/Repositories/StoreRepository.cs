@@ -1,4 +1,5 @@
 using Domain.Entities.BusinessEntities;
+using Domain.Interfaces;
 using Domain.Repository;
 using Infrastructure.DataAccess.Specification;
 using Infrastructure.Persistence;

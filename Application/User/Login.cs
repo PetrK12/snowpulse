@@ -1,6 +1,6 @@
 using Application.Core;
 using Application.DataTransferObject;
-using Domain;
+using Domain.Interfaces;
 using Domain.Entities.BusinessEntities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

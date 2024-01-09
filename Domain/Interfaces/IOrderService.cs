@@ -1,6 +1,6 @@
 using Domain.Entities.OrderAggregate;
 
-namespace Domain;
+namespace Domain.Interfaces;
 
 public interface IOrderService
 {

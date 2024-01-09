@@ -1,4 +1,5 @@
 using Domain.Entities.BusinessEntities;
+using Domain.Interfaces;
 
 namespace Domain.Repository;
 

@@ -1,7 +1,7 @@
 using API.Errors;
 using Application.MappingProfiles;
 using Application.Products;
-using Domain;
+using Domain.Interfaces;
 using Domain.Repository;
 using Infrastructure.DataAccess.Repositories;
 using Infrastructure.DataAccess.UnitOfWork;

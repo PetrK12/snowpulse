@@ -1,6 +1,6 @@
 using System.Collections;
-using Domain;
 using Domain.Entities.BusinessEntities;
+using Domain.Interfaces;
 using Domain.Repository;
 using Infrastructure.DataAccess.Repositories;
 using Infrastructure.Persistence;

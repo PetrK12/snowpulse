@@ -2,8 +2,8 @@ using System.Security.Claims;
 using Application.Core;
 using Application.DataTransferObject;
 using Application.Extensions;
-using Domain;
 using Domain.Entities.BusinessEntities.Identity;
+using Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
