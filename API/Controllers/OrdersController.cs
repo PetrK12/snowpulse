@@ -1,6 +1,7 @@
 using API.Errors;
 using Application.DataTransferObject;
 using Application.Extensions;
+using Application.Orders;
 using AutoMapper;
 using Domain.Interfaces;
 using Domain.Entities.OrderAggregate;
@@ -12,48 +13,20 @@ namespace API.Controllers;
 [Authorize]
 public class OrdersController : BaseController
 {
-    private readonly IOrderService _orderService;
-    private readonly IMapper _mapper;
-
-    public OrdersController(IOrderService orderService, IMapper mapper)
-    {
-        _orderService = orderService;
-        _mapper = mapper;
-    }
-
     [HttpPost]
-    public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
-    {
-        var email = HttpContext.User.RetrieveEmailFromPrincipal();
-        var address = _mapper.Map<AddressDto, Address>(orderDto.ShipToAddress);
-
-        var order = await _orderService.CreateOrderAsync(email, orderDto.DeliveryMethodId, orderDto.BasketId, address);
-
-        if (order == null) return BadRequest(new ApiResponse(400, "Creating order failed"));
-        return Ok(order);
-    }
+    public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto) => HandleResult(await 
+        Mediator.Send(new Create.Command { OrderDto = orderDto, User = User }));
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<OrderToReturnDto>>> GetOrdersForUser()
-    {
-        var email = HttpContext.User.RetrieveEmailFromPrincipal();
-        var orders = await _orderService.GetOrdersForUserAsync(email);
-        return Ok(_mapper.Map<IReadOnlyList<OrderToReturnDto>>(orders));
-    }
+    public async Task<ActionResult<IReadOnlyList<OrderToReturnDto>>> GetOrdersForUser() => HandleResult(await
+        Mediator.Send(new GetForUser.Query { User = User}));
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id)
-    {
-        var email = HttpContext.User.RetrieveEmailFromPrincipal();
-        var order = await _orderService.GetOrderByIdAsync(id, email);
-
-        if (order == null) return NotFound(new ApiResponse(404));
-
-        return _mapper.Map<OrderToReturnDto>(order);
-    }
+    public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id) => HandleResult(await
+        Mediator.Send(new GetForUserById.Query { Id = id, User = User }));
 
     [HttpGet("deliveryMethods")]
-    public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
-    =>Ok(await _orderService.GetDeliveryMethodsAsync());
-    
+    public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods() => HandleResult(await
+        Mediator.Send(new GetDeliveryMethods.Query()));
+
 }
