@@ -5,6 +5,7 @@ using Domain.Interfaces;
 using Domain.Repository;
 using Infrastructure.DataAccess.Repositories;
 using Infrastructure.DataAccess.UnitOfWork;
+using Infrastructure.Payment;
 using Infrastructure.Persistence;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,7 @@ public static class ApplicationServiceExtension
         services.AddScoped(typeof(IRepository<>), typeof(StoreRepository<>));
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IPaymentService, PaymentSevice>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(List.Handler).Assembly));
         services.AddCors(opts =>
         {

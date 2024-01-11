@@ -17,7 +17,8 @@ public class OrderService : IOrderService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, Address shippingAddress)
+    public async Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, 
+        Address shippingAddress)
     {
         var basket = await _basketRepository.GetBasketAsync(basketId);
         var items = new List<OrderItem>();
@@ -33,12 +34,23 @@ public class OrderService : IOrderService
 
         var subtotal = items.Sum(item => item.Price * item.Quantity);
 
-        var order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal);
-        _unitOfWork.Repository<Order>().Create(order);
-        var result = await _unitOfWork.Complete();
-
+        var spec = new OrderByPaymentIntentIdSpecification(basket.PaymentIntentId);
+        var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+        if (order != null)
+        {
+            order.ShipToAddress = shippingAddress;
+            order.DeliveryMethod = deliveryMethod;
+            order.Subtotal = subtotal;
+            _unitOfWork.Repository<Order>().Update(order);
+        }
+        else
+        {
+            order = new Order(items, buyerEmail, shippingAddress, deliveryMethod, subtotal, basket.PaymentIntentId);
+            _unitOfWork.Repository<Order>().Create(order);
+        }
+        
+        var result = await _unitOfWork.Complete();  
         if (result <= 0) return null;
-        await _basketRepository.DeleteBasketAsync(basketId);
         return order;
     }
 

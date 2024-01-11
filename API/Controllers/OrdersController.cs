@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[Authorize]
+//[Authorize]
 public class OrdersController : BaseController
 {
     [HttpPost]

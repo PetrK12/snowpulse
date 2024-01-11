@@ -3,6 +3,7 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {AccountService} from "../account/account.service";
 import {add} from "ngx-bootstrap/chronos";
 import {IAddress} from "../shared/models/address";
+import {BasketService} from "../basket/basket.service";
 
 @Component({
   selector: 'app-checkout',
@@ -11,7 +12,8 @@ import {IAddress} from "../shared/models/address";
 })
 export class CheckoutComponent implements OnInit{
 
-  constructor(private fb: FormBuilder, private accountService: AccountService) {}
+  constructor(private fb: FormBuilder, private accountService: AccountService,
+              private basketService: BasketService) {}
 
   checkoutForm = this.fb.group({
     addressForm: this.fb.group({
@@ -25,7 +27,7 @@ export class CheckoutComponent implements OnInit{
       deliveryMethod: ['', Validators.required],
     }),
     paymentForm: this.fb.group({
-      nameoncard: ['', Validators.required],
+      nameOnCard: ['', Validators.required],
     })
   })
   getAddressFormValues() {
@@ -40,5 +42,13 @@ export class CheckoutComponent implements OnInit{
   }
   ngOnInit() {
     this.getAddressFormValues();
+    this.getDeliverMethodValue();
+  }
+
+  getDeliverMethodValue() {
+    const basket = this.basketService.getCurrentBasketValue();
+    if(basket && basket.deliveryMethodId){
+      this.checkoutForm.get('deliveryForm')?.get('deliveryMethod')?.patchValue(basket.deliveryMethodId.toString());
+    }
   }
 }
